@@ -69,7 +69,6 @@ function sendSummary(sheet_obj, subject){
   let email_address = sheet_obj.getRange(app_const.owner_email).getValue();
   if(!subject){subject = name + "'s account summary as of "+ Utilities.formatDate(new Date(),"PST", "yyyy-MM-dd");}
   let htmlBody = '<table></tr>'+sheet_obj.getRange(app_const.summary_range).getValues().map(rw =>( '<td><b>'+rw[0]+'</b></td><td>'+rw[1]+'</td>')).join('</tr><tr>') +'</tr></table>';
-  console.log(htmlBody);
   GmailApp.sendEmail(email_address, subject,'',{name:"Yazlali Banking Solution", htmlBody});
 }
 
@@ -95,12 +94,13 @@ function checkForTransaction(sheet_obj){
     let first_spend_row = app_const.spend_cols.dlr+app_const.data_start.toString()+":"+app_const.spend_cols.src+app_const.data_start.toString();
     for(let i =0; i<num_lines; i++){
       sheet_obj.getRange(first_spend_row).insertCells(SpreadsheetApp.Dimension.ROWS);
-      sheet_obj.getRange(first_spend_row).setValues([[spending_details[i][0][0], spending_details[i][1],spending_details[i][0][1]]]);
-      recordLast(sheet_obj,spending_details[i][0][0], spending_details[i][0][1], 0, spending_details[i][1] );
+      let abs_number_dlrs = Math.abs(parseInt(spending_details[i][0][0]));
+      sheet_obj.getRange(first_spend_row).setValues([[abs_number_dlrs, spending_details[i][1],spending_details[i][0][1]]]);
+      recordLast(sheet_obj,abs_number_dlrs, spending_details[i][0][1], 0, spending_details[i][1] );
       unread_threads[i].markRead();
       calcTotal(sheet_obj);
       findLast(sheet_obj);
-      sendSummary(sheet_obj, "You just spent $"+spending_details[i][0][0]);
+      sendSummary(sheet_obj, "You just spent $"+ abs_number_dlrs);
     }
     
   }
