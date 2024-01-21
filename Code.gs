@@ -70,7 +70,7 @@ function sendSummary(sheet_obj, subject){
   if(!subject){subject = name + "'s account summary as of "+ Utilities.formatDate(new Date(),"PST", "yyyy-MM-dd");}
   let htmlBody = '<table></tr>'+sheet_obj.getRange(app_const.summary_range).getValues().map(rw =>( '<td><b>'+rw[0]+'</b></td><td>'+rw[1]+'</td>')).join('</tr><tr>') +'</tr></table>';
   console.log(htmlBody);
-  MailApp.sendEmail({to:email_address, subject,htmlBody})
+  GmailApp.sendEmail(email_address, subject,'',{name:"Yazlali Banking Solution", htmlBody});
 }
 
 function weeklyEmail(){
