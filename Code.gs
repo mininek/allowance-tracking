@@ -95,7 +95,7 @@ function checkForTransaction(sheet_obj){
     let first_spend_row = app_const.spend_cols.dlr+app_const.data_start.toString()+":"+app_const.spend_cols.src+app_const.data_start.toString();
     for(let i =0; i<num_lines; i++){
       sheet_obj.getRange(first_spend_row).insertCells(SpreadsheetApp.Dimension.ROWS);
-      let abs_number_dlrs = Math.abs(parseInt(spending_details[i][0][0]));
+      let abs_number_dlrs = Math.abs(Number(spending_details[i][0][0])).toFixed(2);
       sheet_obj.getRange(first_spend_row).setValues([[abs_number_dlrs, spending_details[i][1],spending_details[i][0][1]]]);
       recordLast(sheet_obj,abs_number_dlrs, spending_details[i][0][1], 0, spending_details[i][1] );
       unread_threads[i].markRead();
@@ -118,4 +118,8 @@ function addAllowance(sheet_obj){
   curr_sheet.getRange(first_income_row).setValues([[allowance_num, todays_date , message]]);
   calcTotal(sheet_obj);
   recordLast(sheet_obj,allowance_num, message, 1, todays_date );
+}
+
+function returnMoney(){
+
 }
