@@ -7,6 +7,7 @@ const app_const ={
   total:"B6",
   total_income: "B7",
   total_spend:"B8",
+  household: "F1",
   data_start:11,
   income_cols: {dlr: "A", dt: "B", src:"C"},
   spend_cols: {dlr: "E", dt: "F", src:"G"},
@@ -69,7 +70,7 @@ function sendSummary(sheet_obj, subject){
   let email_address = sheet_obj.getRange(app_const.owner_email).getValue();
   if(!subject){subject = name + "'s account summary as of "+ Utilities.formatDate(new Date(),"PST", "yyyy-MM-dd");}
   let htmlBody = '<table></tr>'+sheet_obj.getRange(app_const.summary_range).getValues().map(rw =>( '<td><b>'+rw[0]+'</b></td><td>'+rw[1]+'</td>')).join('</tr><tr>') +'</tr></table>';
-  GmailApp.sendEmail(email_address, subject,'',{name:"Yazlali Banking Solution", htmlBody});
+  GmailApp.sendEmail(email_address, subject,'',{name: sheet_obj.getRange(app_const.household).getValue()+" Banking Solution", htmlBody});
 }
 
 function weeklyEmail(){
